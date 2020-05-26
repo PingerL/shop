@@ -4,20 +4,21 @@
       <div class="avtar-box">
         <img src="../assets/logo.png" alt="头像" />
       </div>
-      <el-form label-width="0px" class="login-form" v-model="form">
-        <el-form-item>
-          <el-input v-model="form.username" placeholder="请输入用户名" prefix-icon="iconfont icon-denglu"></el-input>
+      <el-form label-width="0px" class="login-form" :model="form" :rules="loginRules">
+        <el-form-item prop="username">
+          <el-input v-model="form.username"  placeholder="请输入用户名" prefix-icon="iconfont icon-denglu"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             v-model="form.password"
             placeholder="请输入密码"
             type="password"
             prefix-icon="iconfont icon-denglumima"
+            
           ></el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="primary">登陆</el-button>
+          <el-button type="primary">登录</el-button>
           <el-button type="info">重置</el-button>
         </el-form-item>
       </el-form>
@@ -32,6 +33,17 @@ export default {
       form: {
         username: "",
         password: ""
+      },
+      // 表单验证规则对象
+      loginRules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 4, max: 10, message: "长度在 4 到 10 个字符", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 8, max: 10, message: "长度在 8 到 10 个字符", trigger: "blur" }
+        ]
       }
     };
   }
