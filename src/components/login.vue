@@ -4,9 +4,9 @@
       <div class="avtar-box">
         <img src="../assets/logo.png" alt="头像" />
       </div>
-      <el-form label-width="0px" class="login-form" :model="form" :rules="loginRules">
+      <el-form label-width="0px" class="login-form" :model="form" :rules="loginRules" ref="loginForm">
         <el-form-item prop="username">
-          <el-input v-model="form.username"  placeholder="请输入用户名" prefix-icon="iconfont icon-denglu"></el-input>
+          <el-input v-model="form.username" placeholder="请输入用户名" prefix-icon="iconfont icon-denglu"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
@@ -14,12 +14,11 @@
             placeholder="请输入密码"
             type="password"
             prefix-icon="iconfont icon-denglumima"
-            
           ></el-input>
         </el-form-item>
         <el-form-item class="btns">
           <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="info" @click="resetHandle">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -46,6 +45,11 @@ export default {
         ]
       }
     };
+  },
+  methods:{
+    resetHandle(){
+      this.$refs.loginForm.resetFields()
+    }
   }
 };
 </script>
