@@ -17,7 +17,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
+          <el-button type="primary" @click="loginHandle">登录</el-button>
           <el-button type="info" @click="resetHandle">重置</el-button>
         </el-form-item>
       </el-form>
@@ -49,6 +49,11 @@ export default {
   methods:{
     resetHandle(){
       this.$refs.loginForm.resetFields()
+    },
+    loginHandle(){
+      this.$refs.loginForm.validate( valid => {
+        console.log(valid)
+      })
     }
   }
 };
