@@ -4,7 +4,13 @@
       <div class="avtar-box">
         <img src="../assets/logo.png" alt="头像" />
       </div>
-      <el-form label-width="0px" class="login-form" :model="form" :rules="loginRules" ref="loginForm">
+      <el-form
+        label-width="0px"
+        class="login-form"
+        :model="form"
+        :rules="loginRules"
+        ref="loginForm"
+      >
         <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="请输入用户名" prefix-icon="iconfont icon-denglu"></el-input>
         </el-form-item>
@@ -41,19 +47,25 @@ export default {
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 8, max: 10, message: "长度在 8 到 10 个字符", trigger: "blur" }
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
         ]
       }
     };
   },
-  methods:{
-    resetHandle(){
-      this.$refs.loginForm.resetFields()
+  methods: {
+    resetHandle() {
+      this.$refs.loginForm.resetFields();
     },
-    loginHandle(){
-      this.$refs.loginForm.validate( valid => {
-        console.log(valid)
-      })
+    loginHandle() {
+      this.$refs.loginForm.validate(async valid => {
+        if (!valid) return;
+        const { data: res } = await this.$http.post("login", this.form);
+        if (res.meta.status !== 200) return this.$message.error("登录失败");
+        this.$message.success("登录成功");
+
+        window.sessionStorage.setItem('token',res.data.token)
+        this.$router.push('/home')
+      });
     }
   }
 };
