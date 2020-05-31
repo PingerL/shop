@@ -12,13 +12,13 @@
         <div class="toggle-btn" @click="toggleHandle">
           <i class="iconfont icon-zhediexiaoguo"></i>
         </div>
-        <el-menu background-color="transparent" text-color="#fff" active-text-color="#409bff" unique-opened :collapse="collapse" :collapse-transition="false">
+        <el-menu background-color="transparent" text-color="#fff" active-text-color="#409bff" unique-opened :collapse="collapse" :collapse-transition="false" router :default-active="activePath">
           <el-submenu :index="item.id + ''" v-for="(item,index) in memuList" :key="item.id" >
             <template slot="title">
               <i :class="iconObj[index]"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item :index="subItem.id +''" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveActiveState('/'+subItem.path)">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>{{subItem.authName}}</span>
@@ -27,24 +27,35 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 export default {
+  name:"Home",
   data(){
     return {
       collapse:false, //是否折叠
       memuList:[],
+      activePath:'', 
       iconObj: ['iconfont icon-yonhu','iconfont icon-quanxianguanli','iconfont icon-shangpin','iconfont icon-dingdan','iconfont icon-yunliankeji-']
     }
   },
   created(){
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
+
+    saveActiveState(activePath){
+      // 保存链接的激活状态 
+      window.sessionStorage.setItem('activePath',activePath)
+      // this.activePath = activePath
+    },
     logoutHandle() {
       window.sessionStorage.clear();
       this.$router.push("/login");
@@ -53,7 +64,6 @@ export default {
       const {data:res} = await this.$http.get('menus')
       if(res.meta.status !== 200) return this.$message.error(res.data.msg)
       this.memuList = res.data
-      console.log(this.memuList)
     },
     toggleHandle(){
       this.collapse = !this.collapse
@@ -71,7 +81,6 @@ export default {
 }
 .home-container {
   height: 100%;
-  color: white;
 }
 .el-header {
   background-color: #373d41;
